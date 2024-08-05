@@ -1,26 +1,24 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 from pymongo.server_api import ServerApi
 
-client = MongoClient(
+try:
+    client = MongoClient(
     "mongodb+srv://astrebovaolga01:01061970@cluster0.ccslbtj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     server_api=ServerApi('1')
 )
-db = client.book
+
+    db = client.book
+
+except errors.ConnectionError as e:
+    print(f"Error connecting to MongoDB: {e}")
+    exit(1)
 
 result = db.cats.find({})
 for el in result:
     print(el)
 
-def get_cat_info_by_name(cat_name):
-    # Підключення до MongoDB
-    client = MongoClient(
-        "mongodb+srv://astrebovaolga01:01061970@cluster0.ccslbtj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-        server_api=ServerApi('1')
-    )
-    
-    # Вибір бази даних
-    db = client.book
-    
+def get_cat_info_by_name(cat_name):    
+         
     # Пошук кота за ім'ям
     result = db.cats.find_one({"name": cat_name})
     
